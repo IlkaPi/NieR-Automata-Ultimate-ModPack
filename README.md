@@ -146,7 +146,7 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 
 Сборка не присваивает чужой труд, а объединяет, синхронизирует и исправляет конфликты между лучшими работами моддинг-сообщества **NieR:Automata**. Огромная благодарность авторам оригинальных инструментов и модификаций (если вам понравилась сборка — обязательно зайдите по ссылкам и поставьте *Endorse* авторам на NexusMods):
 
-* **Сборка дистрибутива, интеграция модулей, исправление коллизий архивов/физики и авто-инсталлятор:** **[IlkaPi](https://github.com/IlkaPi)**
+* **Идея, отбор модификаций, 6 недель ручного тестирования и сборка дистрибутива:** **[IlkaPi](https://github.com/IlkaPi)** *(скрипты автоматизации и технические патчи совместимости архивов реализованы в связке с **Gemini 4 Argon** и **Claude** в среде Google Antigravity)*
 * **[Special K / FAR (Fix Automata Resolution)](https://github.com/Kaldaien/FAR)** — *Kaldaien*
 * **[WAX — Wolf's Automata eXpansion (#744)](https://www.nexusmods.com/nierautomata/mods/744)** — *Woeful_Wolf* *(с кастомным патчем фиксированной сортировки инвентаря и Limit Break)*
 * **[NAIOM — NieR:Automata Input Overhaul Mod (#12)](https://www.nexusmods.com/nierautomata/mods/12)** — *Methanhydrat*
