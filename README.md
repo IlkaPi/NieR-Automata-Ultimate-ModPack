@@ -163,7 +163,9 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 * **[Free Roam — Complete Map Collision Rework (#322)](https://www.nexusmods.com/nierautomata/mods/322)** — *мир без невидимых стен*
 * **[Denser Grass (#657)](https://www.nexusmods.com/nierautomata/mods/657)** (*Seek877*) + **[Lunar Tear 3D Fix (#558)](https://www.nexusmods.com/nierautomata/mods/558)**
 * **[Gameplay Changes / Animation Swap (#582)](https://www.nexusmods.com/nierautomata/mods/582)** + **[Blinking Animations for 2B & A2 (#771)](https://www.nexusmods.com/nierautomata/mods/771)** + **[No Pod Cooldown (#651)](https://www.nexusmods.com/nierautomata/mods/651)**
-* **Bunker in Color & Hidden Amusement Park Map Unlock** (*RaiderBV*), **Sand Footsteps Remastered** (*Takahama & Kekoulis*), **AutomataHighFPS v0.2.0**
-* **Русская локализация текста и 4K UI:** порт официального перевода *The End of YoRHa Edition* (*Rigonda*) и наработки сообщества русификации (*The Miracle / Rindera*)
+* **[AutomataHighFPS v0.2.0](https://github.com/Kajcsi/AutomataHighFPS)** — *Kajcsi* *(разблокировка частоты кадров, ускорение загрузок и синхронизация 60 Гц физики)*
+* **[Bunker in Color (#488)](https://www.nexusmods.com/nierautomata/mods/488)** & **[Hidden Amusement Park Map Unlock (#210)](https://www.nexusmods.com/nierautomata/mods/210)** — *RaiderBV*
+* **[Sand Footsteps Remastered (#359)](https://www.nexusmods.com/nierautomata/mods/359)** — *Takahama & Kekoulis*
+* **Русская локализация текста и 4K UI:** **[Порт официального перевода Nintendo Switch (The End of YoRHa Edition)](https://www.playground.ru/nier_automata/file/nier_automata_rusifikator_teksta_dlya_p_versii_port_ofitsialnoj_lokatizatsii_s_nintendo_switch_v1-1718012)** (*Rigonda*) и **[народная русификация на Zone of Games](https://www.zoneofgames.ru/games/nier_automata/files/5642.html)** (*The Miracle / Rindera*)
 
 > Все права на оригинальную игру **NieR:Automata** принадлежат **Square Enix** и **PlatinumGames Inc.** Сборка распространяется бесплатно в некоммерческих целях и требует установленной базовой игры.
