@@ -12,7 +12,7 @@
 
 ## Скачать сборку (BitTorrent / Magnet)
 
-* **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata_Ultimate_ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ — [прямое зеркало из репозитория](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
+* **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ — [прямое зеркало из репозитория](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
 * **Видео-превью (геймплей пролога + переход в 2K 60 FPS катсцену появления 2B):** [**Gameplay_Preview_Prologue_60FPS.mp4**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4) *(252 МБ)*
 * **Объём дистрибутива:** **58.94 ГБ** (`63 289 735 980` байт, `3 480` файлов — поставляется готовой папкой без архивации)
 * **InfoHash (SHA-1):** `0f5449d15e0b0d702dd1feba1807a167348ee7e5`
@@ -164,8 +164,9 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 * **[Denser Grass (#657)](https://www.nexusmods.com/nierautomata/mods/657)** (*Seek877*) + **[Lunar Tear 3D Fix (#558)](https://www.nexusmods.com/nierautomata/mods/558)**
 * **[Gameplay Changes / Animation Swap (#582)](https://www.nexusmods.com/nierautomata/mods/582)** + **[Blinking Animations for 2B & A2 (#771)](https://www.nexusmods.com/nierautomata/mods/771)** + **[No Pod Cooldown (#651)](https://www.nexusmods.com/nierautomata/mods/651)**
 * **[AutomataHighFPS v0.2.0](https://github.com/Kajcsi/AutomataHighFPS)** — *Kajcsi* *(разблокировка частоты кадров, ускорение загрузок и синхронизация 60 Гц физики)*
-* **[Bunker in Color (#488)](https://www.nexusmods.com/nierautomata/mods/488)** & **[Hidden Amusement Park Map Unlock (#210)](https://www.nexusmods.com/nierautomata/mods/210)** — *RaiderBV*
+* **[Bunker in Color 2.0 (#68)](https://www.nexusmods.com/nierautomata/mods/68)** — *Alprazolam*
+* **[Hidden Amusement Park Map Unlock (#210)](https://www.nexusmods.com/nierautomata/mods/210)** — *RaiderBV*
 * **[Sand Footsteps Remastered (#359)](https://www.nexusmods.com/nierautomata/mods/359)** — *Takahama & Kekoulis*
-* **Русская локализация текста и 4K UI:** **[Порт официального перевода Nintendo Switch (The End of YoRHa Edition)](https://www.playground.ru/nier_automata/file/nier_automata_rusifikator_teksta_dlya_p_versii_port_ofitsialnoj_lokatizatsii_s_nintendo_switch_v1-1718012)** (*Rigonda*) и **[народная русификация на Zone of Games](https://www.zoneofgames.ru/games/nier_automata/files/5642.html)** (*The Miracle / Rindera*)
+* **Русская локализация текста и 4K UI:** **[Русификатор текста и текстур на Zone of Games](https://www.zoneofgames.ru/games/nier_automata/files/5642.html)** (*The Miracle / редактура Rindera*) + кастомный перевод и описания расширенного гардероба WAX (`ru_fix`)
 
 > Все права на оригинальную игру **NieR:Automata** принадлежат **Square Enix** и **PlatinumGames Inc.** Сборка распространяется бесплатно в некоммерческих целях и требует установленной базовой игры.
