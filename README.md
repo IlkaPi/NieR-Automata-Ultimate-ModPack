@@ -5,14 +5,15 @@
 > **Комплексное техническое и графическое переиздание ПК-версии *NieR:Automata* с автоматической установкой в 1 клик (`Install_NieR_Mods.bat`), полной русской локализацией в 4K и интерактивным менеджером модулей (`Toggle_Mods.bat`).**
 
 [![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-58.94_ГБ_(v1.0)-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
-[![Прямая копия .torrent из репо](https://img.shields.io/badge/Зеркало_.torrent-Raw_GitHub-0969da?style=for-the-badge&logo=github)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent)
+[![Видео геймплея 60 FPS](https://img.shields.io/badge/Видео_демонстрация-Пролог_&_2K_60FPS_катсцена_(MP4)-e34c26?style=for-the-badge&logo=youtube)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4)
 [![Исходный код установщика](https://img.shields.io/badge/Код_установщика-PowerShell_(Open_Source)-5391FE?style=for-the-badge&logo=powershell)](scripts_preview/)
 
 ---
 
 ## Скачать сборку (BitTorrent / Magnet)
 
-* **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ)*
+* **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata_Ultimate_ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ — [прямое зеркало из репозитория](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
+* **Видео-превью (геймплей пролога + переход в 2K 60 FPS катсцену появления 2B):** [**Gameplay_Preview_Prologue_60FPS.mp4**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4) *(252 МБ)*
 * **Объём дистрибутива:** **58.94 ГБ** (`63 289 735 980` байт, `3 480` файлов — поставляется готовой папкой без архивации)
 * **InfoHash (SHA-1):** `0f5449d15e0b0d702dd1feba1807a167348ee7e5`
 
@@ -32,11 +33,16 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 
 ## Скриншоты из сборки
 
-| Руины Города (4K AI Textures + ReShade) | Пролог (4K металл + DLAA + 4K RU UI) |
+| Бункер YoRHa (Образ Stellar Blade `#776`) | Лагерь Сопротивления (4K текстуры + ReShade + маркеры) |
 | :---: | :---: |
-| ![City Ruins 4K](screenshots/02_city_ruins_4k.jpg) | ![2B Factory 4K](screenshots/03_2b_factory_4k.jpg) |
-| **Гардероб Re[in]carnation + Маркеры сундуков** | **A2 4K Remaster + Лисья маска Switch DLC** |
-| ![A2 Reincarnation](screenshots/04_a2_reincarnation.jpg) | ![A2 Fox Mask](screenshots/05_a2_fox_mask_4k.jpg) |
+| ![2B Stellar Blade Bunker](screenshots/02_2b_stellar_blade_bunker.jpg) | ![Resistance Camp 4K](screenshots/03_resistance_camp_4k.jpg) |
+| **Полная русская локализация диалогов и 4K UI** | **Инвентарь гардероба (Часть 1: 2B -> A2)** |
+| ![RU Dialogue Stellar Blade](screenshots/04_ru_dialogue_stellar.jpg) | ![Wardrobe Part 1](screenshots/05_wardrobe_part1.jpg) |
+| **Инвентарь гардероба (Часть 2: A2 -> 9S -> Аксессуары)** | **Нюанс с лисьими масками Switch DLC на длинных волосах** |
+| ![Wardrobe Part 2](screenshots/06_wardrobe_part2.jpg) | ![Fox Mask Hair Clipping Note](screenshots/07_a2_fox_mask_note.jpg) |
+
+> [!NOTE]
+> **Честный нюанс по лисьим маскам из Switch DLC:** у моделей масок (*Белая* и *Чёрная лисья маска*) геометрия конфликтует с длинными прядями волос 2B и A2 (чёлка проходит сквозь маску, как на скриншоте выше), поэтому визуально аккуратно эти две маски сидят в основном на **9S**. Заколки (*Лунный свет* и *Цветок памяти*) отлично смотрятся на всех.
 
 ---
 
@@ -53,7 +59,7 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 | :--- | :---: | :---: |
 | Глобальный пакет 4K AI-текстур окружения (`#794` — 2 301 текстура `.dds`) | **30.84 ГБ** | 52.3% |
 | Сюжетные видеоролики в 2K (1440p) 60 FPS H.264 (`#688` — 150 катсцен + 4K заставки) | **23.15 ГБ** | 39.3% |
-| Пакет текстур архитектуры и ключевых объектов GPUnity V1.03 | **1.96 ГБ** | 3.3% |
+| Пакет текстур архитектуры и ключевых объектов GPUnity V1.03 (`#5`) | **1.96 ГБ** | 3.3% |
 | Пакеты костюмов 2B / A2 / 9S, аксессуары и доработанные анимации | **1.61 ГБ** | 2.7% |
 | Модификации игрового мира (снятие невидимых стен, растительность, песок, 3D-карты) | **0.68 ГБ** | 1.2% |
 | 4K Ремастер базовых моделей главных героев (`2B / A2 / 9S`) | **0.23 ГБ** | 0.4% |
@@ -86,11 +92,11 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 | № | По умолч. | Модуль | Описание |
 | :---: | :---: | :--- | :--- |
 | **1** | **ВКЛ** | **Гардероб 2B (8 образов в 1)** | 4K-ремастер базы + 7 отдельных костюмов в инвентаре: *Классика 2017*, два образа кроссовера *Stellar Blade* (`#776` и Парадный `#749` с выверенной физикой ткани и костей), *NieR Re[in]carnation*, *4K 2BBE*, *Кимоно* и *Реплика 2P*. |
-| **2** | **ВКЛ** | **Гардероб A2 (6-в-1) + 9S (5-в-1) + Аксессуары** | 4K-ремастеры баз, образы *Stellar Blade* (A2), *Re[in]carnation* (A2/9S), *Кимоно* (A2/9S), *P2 / 9P*, плюс 4 аксессуара (*Белая и Чёрная лисьи маски*, заколки *Лунный свет* и *Цветок памяти*). |
+| **2** | **ВКЛ** | **Гардероб A2 (6-в-1) + 9S (5-в-1) + Аксессуары** | 4K-ремастеры баз, образы *Stellar Blade* (A2), *Re[in]carnation* (A2/9S), *Кимоно* (A2/9S), *P2 / 9P*, плюс 4 аксессуара (*Белая и Чёрная лисьи маски* — лучше всего сидят на 9S, заколки *Лунный свет* и *Цветок памяти*). |
 | **3** | **ВЫКЛ** | **Цветной Бункер YoRHa (Bunker in Color 2.0)** | Заменяет Ч/Б фильтр орбитальной базы YoRHa на цветное освещение. Отключён по умолчанию ради сохранения оригинальной режиссуры (включается цифрой `3`). |
 | **4** | **ВКЛ** | **Удаление экранной сетки и виньетки** | Убирает пиксельную сетку поверх кадра и мыло по краям экрана. |
-| **5** | **ВКЛ** | **Густая растительность + 3D Лунная Слеза (`#558`)** | Увеличивает плотность травы и заменяет плоский спрайт цветка Лунной Слезы на честную 3D-модель. |
-| **6** | **ВКЛ** | **HD-следы на песке (Sand Steps HD)** | Рельефные HD-отпечатки следов в Пустыне. |
+| **5** | **ВКЛ** | **Густая растительность (`#657`) + 3D Лунная Слеза (`#558`)** | Увеличивает плотность травы и заменяет плоский спрайт цветка Лунной Слезы на честную 3D-модель. |
+| **6** | **ВКЛ** | **HD-следы на песке (Sand Steps HD)** | Рельефные HD-отпечатки следов в Пустыне без парения над землёй. |
 | **7** | **ВКЛ** | **Полная 3D-карта Парка Развлечений** | Дополняет 3D-карту скрытыми переходами, лестницами и подземными уровнями. |
 | **8** | **ВКЛ** | **Цветокоррекция ReShade (`NieR Fantasy`)** | Сбалансированный профиль глубины теней и полутонов с сохранением авторской палитры. |
 | **9** | **ВКЛ** | **Отзывчивость боя (`#582`) + Живой взгляд (`#771`)** | Ускоряет отмену анимаций уклонением, делает подхват Пода мгновенным и добавляет живое моргание глаз для 2B и A2. |
@@ -118,7 +124,7 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 | **`Ctrl + Shift + Backspace`** | Меню **Special K / FAR** (мониторинг, окно, HDR) |
 | **`F10`** | Вкл / выкл сглаживание **NVIDIA DLAA** на лету |
 | **`F9`** | Стоп-кадр игрового мира (**WAX Freeze** — фотопауза для скриншотов) |
-| **`PrintScreen`** | Сохранить скриншот в папку игры |
+| **`PrintScreen`** | Сохранить скриншот в папку игры *(при игре с HDR лучше снимать через Xbox Game Bar `Win + Alt + PrtScn`)* |
 | **`-`** *(минус)* | Горячая перезагрузка настроек управления `NAIOM` без выхода из игры |
 
 ### Управление (Геймпад и Клавиатура + Мышь)
@@ -136,16 +142,28 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 
 ---
 
-## 6. Авторы модификаций и благодарности (Credits)
+## 6. Авторы модификаций и прямые ссылки на первоисточники (Credits)
 
-* **Сборка, интеграция модулей, исправление коллизий архивов/физики и авто-инсталлятор:** **[IlkaPi](https://github.com/IlkaPi)**
-* **Special K / FAR:** *Kaldaien*
-* **WAX (Wolf's Automata eXpansion):** *Woeful_Wolf* *(с кастомным патчем сортировки инвентаря и Limit Break)*
-* **NAIOM:** *Methanhydrat*
-* **Automata LodMod (`#675`) & NVIDIA DLAA (`#826`):** *emoose / RidiculousDeath / авторы плагинов*
-* **AutomataHighFPS:** *сообщество моддеров NieR*
-* **4K AI World Textures (`#794`), 2K 60 FPS Cutscenes (`#688`), GPUnity Pack V1.03, Androids & Pods 4K (`#30`):** *GPUnity, horrible и авторы ремастер-пакетов с NexusMods*
-* **Гардероб, анимации и улучшения мира:** авторы модификаций NexusMods (`#162`, `#168`, `#209`, `#322`, `#558`, `#582`, `#651`, `#749`, `#771`, `#776`, `#812`, Bunker in Color 2.0, Sand Steps HD, 3D Map Fix)
-* **Русская локализация текста и 4K UI:** порт перевода *The End of YoRHa Edition* и сообщество русификации
+Сборка не присваивает чужой труд, а объединяет, синхронизирует и исправляет конфликты между лучшими работами моддинг-сообщества **NieR:Automata**. Огромная благодарность авторам оригинальных инструментов и модификаций (если вам понравилась сборка — обязательно зайдите по ссылкам и поставьте *Endorse* авторам на NexusMods):
+
+* **Сборка дистрибутива, интеграция модулей, исправление коллизий архивов/физики и авто-инсталлятор:** **[IlkaPi](https://github.com/IlkaPi)**
+* **[Special K / FAR (Fix Automata Resolution)](https://github.com/Kaldaien/FAR)** — *Kaldaien*
+* **[WAX — Wolf's Automata eXpansion (#744)](https://www.nexusmods.com/nierautomata/mods/744)** — *Woeful_Wolf* *(с кастомным патчем фиксированной сортировки инвентаря и Limit Break)*
+* **[NAIOM — NieR:Automata Input Overhaul Mod (#12)](https://www.nexusmods.com/nierautomata/mods/12)** — *Methanhydrat*
+* **[GPUnity's Texture Pack (#5)](https://www.nexusmods.com/nierautomata/mods/5)** — *GPUnity*
+* **[Automata-LodMod (#29)](https://www.nexusmods.com/nierautomata/mods/29)** (*emoose*) + **[Automata LodMod Fix v0.3 (#675)](https://www.nexusmods.com/nierautomata/mods/675)**
+* **[DLSS Anti-Aliasing / NVIDIA DLAA (#826)](https://www.nexusmods.com/nierautomata/mods/826)** — *инжектор DLAA / DLSS 4 Transformer*
+* **[4K AI Textures RePacked (#794)](https://www.nexusmods.com/nierautomata/mods/794)** — *на базе 4K текстур от Evgeshajk*
+* **[1440p 60 FPS H.264 Story Cutscenes (#688)](https://www.nexusmods.com/nierautomata/mods/688)** — *апскейл 150 сюжетных видеороликов*
+* **[Androids & Pods 4K Remastered (#30)](https://www.nexusmods.com/nierautomata/mods/30)** — *4K ремастер базовых моделей 2B, A2, 9S и Подов*
+* **[2B Stellar Blade Edition (#776)](https://www.nexusmods.com/nierautomata/mods/776)** — *костюм кроссовера Stellar Blade*
+* **[YoRHa Unofficial Ceremonial Attire — 2B & A2 (#749)](https://www.nexusmods.com/nierautomata/mods/749)** — *парадная форма для 2B и A2*
+* **Костюмы NieR Re[in]carnation (WAX):** **[A2 (#162)](https://www.nexusmods.com/nierautomata/mods/162)** | **[2B (#168)](https://www.nexusmods.com/nierautomata/mods/168)** | **[9S (#209)](https://www.nexusmods.com/nierautomata/mods/209)**
+* **[Kimono Outfits & Switch DLC Accessories (#812)](https://www.nexusmods.com/nierautomata/mods/812)** — *кимоно и аксессуары издания The End of YoRHa*
+* **[Free Roam — Complete Map Collision Rework (#322)](https://www.nexusmods.com/nierautomata/mods/322)** — *мир без невидимых стен*
+* **[Denser Grass (#657)](https://www.nexusmods.com/nierautomata/mods/657)** (*Seek877*) + **[Lunar Tear 3D Fix (#558)](https://www.nexusmods.com/nierautomata/mods/558)**
+* **[Gameplay Changes / Animation Swap (#582)](https://www.nexusmods.com/nierautomata/mods/582)** + **[Blinking Animations for 2B & A2 (#771)](https://www.nexusmods.com/nierautomata/mods/771)** + **[No Pod Cooldown (#651)](https://www.nexusmods.com/nierautomata/mods/651)**
+* **Bunker in Color & Hidden Amusement Park Map Unlock** (*RaiderBV*), **Sand Footsteps Remastered** (*Takahama & Kekoulis*), **AutomataHighFPS v0.2.0**
+* **Русская локализация текста и 4K UI:** порт официального перевода *The End of YoRHa Edition* (*Rigonda*) и наработки сообщества русификации (*The Miracle / Rindera*)
 
 > Все права на оригинальную игру **NieR:Automata** принадлежат **Square Enix** и **PlatinumGames Inc.** Сборка распространяется бесплатно в некоммерческих целях и требует установленной базовой игры.
