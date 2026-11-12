@@ -4,7 +4,7 @@
 
 > **Комплексное техническое и графическое переиздание ПК-версии *NieR:Automata* с автоматической установкой в 1 клик (`Install_NieR_Mods.bat`), полной русской локализацией в 4K и интерактивным менеджером модулей (`Toggle_Mods.bat`).**
 
-[![Скачать ZIP (Buzzheavier)](https://img.shields.io/badge/Скачать_ZIP-Buzzheavier_(58.94_ГБ)-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
+[![Скачать ZIP (Быстрое облако)](https://img.shields.io/badge/Скачать_ZIP_(Быстрое_облако)-Без_лимита_скорости_•_58.94_ГБ-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
 [![Зеркало Archive.org](https://img.shields.io/badge/Зеркало_ZIP-Archive.org_(58.94_ГБ)-4285F4?style=for-the-badge&logo=internetarchive)](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)
 [![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-Готовой_папкой-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
 [![Исходный код установщика](https://img.shields.io/badge/Код_установщика-PowerShell_(Open_Source)-5391FE?style=for-the-badge&logo=powershell)](scripts_preview/)
@@ -13,8 +13,8 @@
 
 ## Скачать сборку (58.94 ГБ)
 
-* **Облако 1 (Buzzheavier — `.zip`):** [**NieR_Automata_Ultimate_ModPack_2026.zip**](https://buzzheavier.com/qvkzqsh4isxv)
-* **Облако 2 (Archive.org — `.zip`):** [**Страница раздачи**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) | [**Прямая ссылка**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip)
+* **Облако 1 — Buzzheavier (рекомендуется: прямая загрузка на макс. скорости канала без регистрации и лимитов, `.zip`):** [**NieR_Automata_Ultimate_ModPack_2026.zip**](https://buzzheavier.com/qvkzqsh4isxv)
+* **Облако 2 — Archive.org (вечное зеркало, `.zip`):** [**Страница раздачи**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) | [**Прямая ссылка**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip)
 * **BitTorrent (готовой папкой без архивации):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *([резервная копия](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
 
 <details>
