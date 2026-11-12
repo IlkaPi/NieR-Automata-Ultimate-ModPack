@@ -4,32 +4,25 @@
 
 > **Комплексное техническое и графическое переиздание ПК-версии *NieR:Automata* с автоматической установкой в 1 клик (`Install_NieR_Mods.bat`), полной русской локализацией в 4K и интерактивным менеджером модулей (`Toggle_Mods.bat`).**
 
-[![Скачать напрямую (Buzzheavier)](https://img.shields.io/badge/Скачать_ZIP_(Быстро)-Buzzheavier_58.94_ГБ-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
-[![Зеркало Archive.org](https://img.shields.io/badge/Вечное_зеркало_(ZIP)-Archive.org_58.94_ГБ-4285F4?style=for-the-badge&logo=internetarchive)](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)
-[![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-Готовой_папкой_(v1.0)-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
-[![Видео геймплея 60 FPS](https://img.shields.io/badge/Видео_демонстрация-Пролог_&_2K_60FPS_катсцена_(MP4)-e34c26?style=for-the-badge&logo=youtube)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4)
+[![Скачать ZIP (Buzzheavier)](https://img.shields.io/badge/Скачать_ZIP-Buzzheavier_(58.94_ГБ)-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
+[![Зеркало Archive.org](https://img.shields.io/badge/Зеркало_ZIP-Archive.org_(58.94_ГБ)-4285F4?style=for-the-badge&logo=internetarchive)](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)
+[![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-Готовой_папкой-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
 [![Исходный код установщика](https://img.shields.io/badge/Код_установщика-PowerShell_(Open_Source)-5391FE?style=for-the-badge&logo=powershell)](scripts_preview/)
 
 ---
 
-## Скачать сборку (Прямые облачные ссылки + BitTorrent)
+## Скачать сборку (58.94 ГБ)
 
-### Вариант 1 — Высокоскоростные облачные зеркала (`.zip` без сжатия, 24/7):
-* **Зеркало 1 — Buzzheavier (рекомендуется для браузера — макс. скорость с европейских серверов):** [**Скачать NieR_Automata_Ultimate_ModPack_2026.zip (58.94 ГБ)**](https://buzzheavier.com/qvkzqsh4isxv)
-* **Зеркало 2 — Облачный `.torrent` с Веб-сидом Archive.org (раздаётся 24/7 серверами Архива в несколько потоков ~15+ МБ/с без VPN и без ожидания сидов):** [**nie-r-automata-ultimate-mod-pack-2026_archive.torrent**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/nie-r-automata-ultimate-mod-pack-2026_archive.torrent)
-* **Зеркало 3 — Internet Archive (вечное хранение):** [**Страница релиза**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) | [**Прямая ссылка на `.zip`**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip) *(совет: в 1 поток из браузера без VPN сервера США дают ~0.6–1 МБ/с — качайте через Free Download Manager / IDM в 8–16 потоков или через облачный `.torrent` выше, скорость сразу вырастает до 13–20+ МБ/с!)*
-* **Контрольные суммы `.zip` (`63 291 011 102` байт):**
-  * `MD5`: `13706eabbeca8fd16d8173db1322f0ab`
-  * `SHA-256`: `ac8f0f04ff21a125833b06f5d142497ada1a56712e296b21f555673a47b3681d`
-
-### Вариант 2 — Раздача сразу готовой папкой без архивации (`0 ГБ` на распаковку):
-* **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ — [прямое зеркало из репозитория](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
-* **Видео-превью (геймплей пролога + переход в 2K 60 FPS катсцену появления 2B):** [**Gameplay_Preview_Prologue_60FPS.mp4**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4) *(252 МБ)*
-* **Объём дистрибутива:** **58.94 ГБ** (`63 289 735 980` байт, `3 480` файлов)
-* **InfoHash (SHA-1):** `0f5449d15e0b0d702dd1feba1807a167348ee7e5`
+* **Облако 1 (Buzzheavier — `.zip`):** [**NieR_Automata_Ultimate_ModPack_2026.zip**](https://buzzheavier.com/qvkzqsh4isxv)
+* **Облако 2 (Archive.org — `.zip`):** [**Страница раздачи**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) | [**Прямая ссылка**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip)
+* **BitTorrent (готовой папкой без архивации):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *([резервная копия](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
 
 <details>
-<summary><b>Нажмите, чтобы скопировать Magnet-ссылку напрямую</b></summary>
+<summary><b>Magnet-ссылка и контрольные суммы (MD5 / SHA-256 / InfoHash)</b></summary>
+
+* **MD5 (`.zip`):** `13706eabbeca8fd16d8173db1322f0ab`
+* **SHA-256 (`.zip`):** `ac8f0f04ff21a125833b06f5d142497ada1a56712e296b21f555673a47b3681d`
+* **InfoHash (`.torrent`):** `0f5449d15e0b0d702dd1feba1807a167348ee7e5`
 
 ```text
 magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ultimate_ModPack&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.qu.ax%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ducks.party%3A1984%2Fannounce&tr=udp%3A%2F%2Ftracker.bittor.pw%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.nyaa.vc%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker01-msk-virt.corbina.net%3A80%2Fannounce&tr=http%3A%2F%2Fretracker.local%2Fannounce&tr=http%3A%2F%2Ftracker2.dler.org%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.renfei.net%3A8080%2Fannounce
