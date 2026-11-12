@@ -197,10 +197,10 @@ function Run-FullForensicScan {
     Write-Both ("  Папка игры : " + (Mask-UserPath $GameDir)) Green
 
     if ($GameDir -match '[^\x00-\x7F]') {
-        Add-Finding "CRITICAL" "Этап 0 (Путь к игре)" `
-            "В пути к папке игры есть кириллица (русские буквы) или спецсимволы!" `
-            ("Путь '" + (Mask-UserPath $GameDir) + "' содержит не-ASCII символы. DirectX-перехватчики (Special K / ReShade / LodMod) и сам движок PlatinumGames ломаются при загрузке шейдеров/текстур по кириллическому пути.") `
-            "Перенесите библиотеку Steam / папку игры в путь строго на латинице (например, D:\Games\Steam\steamapps\common\NieRAutomata)."
+        Add-Finding "WARN" "Этап 0 (Путь к игре)" `
+            "В пути к папке игры есть кириллица (русские буквы) или спецсимволы" `
+            ("Путь '" + (Mask-UserPath $GameDir) + "' содержит не-ASCII символы. Некоторые DirectX-перехватчики (Special K / ReShade / LodMod) могут сбоить при загрузке шейдеров по кириллическому пути.") `
+            "Если игра вылетает — перенесите библиотеку Steam / папку игры в путь строго на латинице (например, D:\Games\Steam\steamapps\common\NieRAutomata)."
     }
 
     $DriveLetter = ($GameDir -replace ':.*$', '')
@@ -379,6 +379,8 @@ function Run-FullForensicScan {
                 Write-Both "  [OK] $($mb.File) — активен, контрольная сумма SHA-256 верна" Green
                 if ($mb.File -eq "d3d11.dll") { $DlaaActive = $true }
                 if ($mb.File -eq "ReShade64.dll") { $ReshadeActive = $true }
+            } elseif ($mb.File -eq "nvngx_dlss.dll" -and $sz -gt 15000000 -and ((Get-AuthenticodeSignature $actP -ErrorAction SilentlyContinue).Status -eq "Valid")) {
+                Write-Both "  [OK] nvngx_dlss.dll — активна обновлённая официальная версия NVIDIA ($sz байт, цифровая подпись верна)" Green
             } else {
                 Write-Both "  [КРИТИЧНО] $($mb.File) ПОВРЕЖДЁН ИЛИ ЧУЖОЙ! Размер: $sz (нужен $($mb.Size))" Red
                 Add-Finding "CRITICAL" "Этап 1 (Подмена/порча .dll)" `
@@ -555,11 +557,16 @@ function Run-FullForensicScan {
         $commitGB = [Math]::Round($osInfo.TotalVirtualMemorySize / 1MB, 1)
         $pageGB   = [Math]::Round(($osInfo.TotalVirtualMemorySize - $osInfo.TotalVisibleMemorySize) / 1MB, 1)
         Write-Both "  Память ПК  : ОЗУ $ramGB ГБ | Файл подкачки: $pageGB ГБ (общий лимит: $commitGB ГБ)" Gray
-        if ($commitGB -lt 21.0) {
+        if ($commitGB -lt 18.0) {
             Add-Finding "CRITICAL" "Этап 4 (Нехватка виртуальной памяти / отключён файл подкачки)" `
                 "Суммарный объём виртуальной памяти Windows всего $commitGB ГБ (ОЗУ $ramGB ГБ + подкачка $pageGB ГБ)!" `
                 "С пакетом 4K-текстур на 30.8 ГБ игра резервирует 16.5–19 ГБ виртуальной памяти (Commit). Если у вас 16 ГБ ОЗУ и отключён/зажат файл подкачки Windows, процесс NieRAutomata.exe гарантированно падает с Access Violation (0xc0000005) или Out of Memory!" `
                 "Включите в Windows 'Размер файла подкачки по выбору системы' на быстром SSD (или задайте минимум 16384 МБ)."
+        } elseif ($commitGB -lt 21.5) {
+            Add-Finding "WARN" "Этап 4 (Малый запас виртуальной памяти)" `
+                "Суммарный лимит виртуальной памяти Windows составляет $commitGB ГБ (ОЗУ $ramGB ГБ + подкачка $pageGB ГБ)" `
+                "В пике с открытым браузером сборка может потреблять до 18–19 ГБ виртуальной памяти." `
+                "Рекомендуется поставить 'Размер файла подкачки по выбору системы' в настройках Windows."
         }
     } catch {}
 
@@ -633,20 +640,39 @@ function Run-FullForensicScan {
 
     $LatestBootTime = $null
     if ($AllLogs.Count -eq 0) {
-        Write-Both "  [!] В папке игры нет НИ ОДНОГО лога запуска модов!" Red
-        Add-Finding "CRITICAL" "Этап 0–1 (Смерть процесса ДО инициализации модов)" `
-            "Ни один мод (даже ядро dxgi.dll) ни разу не успел получить управление!" `
-            "Это означает 100% одно из трёх: (1) вы ещё ни разу не нажимали 'Играть' после установки; (2) в Windows нет свежей системной библиотеки msvcp140_atomic_wait.dll (Visual C++ 2022); (3) сработала защита SteamStub на пиратке / закрытом Steam." `
+        Write-Both "  [i] Логи запуска модов ещё не созданы (игра ни разу не запускалась либо закрылась на 0-й секунде)" Yellow
+        Add-Finding "WARN" "Этап 0–1 (Отсутствуют логи запуска)" `
+            "В папке игры ещё нет ни одного лога модов (dxgi.log / wax.log)" `
+            "Если вы ещё не нажимали 'Играть' — это нормально. Если же вы запускали игру, а она мгновенно закрылась — процесс умер ДО старта модов (из-за отсутствия свежего VC++ 2022, закрытого Steam или пиратского EXE)." `
             "Проверьте пункты выше (VC++ 2022, клиент Steam, антивирус)."
     } else {
         $LatestBootTime = ($AllLogs | Sort-Object LastWriteTime -Descending | Select-Object -First 1).LastWriteTime
-        Write-Both ("  Последняя зафиксированная попытка запуска: " + $LatestBootTime.ToString("yyyy-MM-dd HH:mm:ss")) Cyan
+        Write-Both ("  Последняя зафиксированная активность логов: " + $LatestBootTime.ToString("yyyy-MM-dd HH:mm:ss")) Cyan
 
-        # Читаем содержимое актуальных логов этой сессии (окно 5 минут от последнего лога)
-        $SessionCutoff = $LatestBootTime.AddMinutes(-5)
+        # Определяем окно последней сессии с учётом длительной игры (до 6 часов от старта dxgi.log)
+        $SessionCutoff = if (Test-Path $DxgiLogP) {
+            $dxItem = Get-Item $DxgiLogP
+            if ($dxItem.LastWriteTime -lt $LatestBootTime.AddHours(-6)) { $LatestBootTime.AddMinutes(-5) }
+            else { $dxItem.CreationTime.AddMinutes(-5) }
+        } else {
+            $LatestBootTime.AddMinutes(-5)
+        }
+        # Доп. защита: если CreationTime файла старый (перезапись поверх существующего лога), берём минимум из LastWriteTime dxgi.log - 4 часа
+        if (Test-Path $DxgiLogP) {
+            $dxLast = (Get-Item $DxgiLogP).LastWriteTime
+            if ($dxLast -ge $LatestBootTime.AddMinutes(-5)) {
+                $SessionCutoff = $LatestBootTime.AddHours(-6)
+            }
+        }
 
         $dxgiTxt = if ((Test-Path $DxgiLogP) -and ((Get-Item $DxgiLogP).LastWriteTime -ge $SessionCutoff)) { Get-Content $DxgiLogP -Raw -ErrorAction SilentlyContinue } else { "" }
-        $waxTxt  = if ($WaxLogObj -and ($WaxLogObj.LastWriteTime -ge $SessionCutoff)) { Get-Content $WaxLogObj.FullName -TotalCount 150 -ErrorAction SilentlyContinue | Out-String } else { "" }
+        $waxTxt  = ""
+        if ($WaxLogObj -and ($WaxLogObj.LastWriteTime -ge $SessionCutoff)) {
+            # Берём СТРОГО ПОСЛЕДНИЙ запуск внутри суточного wax.log (по маркеру 'Loaded WAX version:')!
+            $waxFull = [System.IO.File]::ReadAllText($WaxLogObj.FullName, [System.Text.Encoding]::UTF8)
+            $waxRuns = [regex]::Split($waxFull, '(?m)^.*Loaded WAX version:.*$')
+            $waxTxt  = if ($waxRuns.Count -gt 1) { $waxRuns[$waxRuns.Count - 1] } else { $waxFull }
+        }
         $hfpsTxt = if ((Test-Path $HfpsLogP) -and ((Get-Item $HfpsLogP).LastWriteTime -ge $SessionCutoff)) { Get-Content $HfpsLogP -TotalCount 60 -ErrorAction SilentlyContinue | Out-String } else { "" }
         $dlaaTxt = if ((Test-Path $DlaaLogP) -and ((Get-Item $DlaaLogP).LastWriteTime -ge $SessionCutoff)) { Get-Content $DlaaLogP -TotalCount 80 -ErrorAction SilentlyContinue | Out-String } else { "" }
         $lodTxt  = if ((Test-Path $LodLogP)  -and ((Get-Item $LodLogP).LastWriteTime  -ge $SessionCutoff)) { Get-Content $LodLogP  -TotalCount 80 -ErrorAction SilentlyContinue | Out-String } else { "" }
@@ -910,37 +936,54 @@ while ($true) {
     $FoundGameDir = Run-FullForensicScan
     if (-not $FoundGameDir -or $env:DIAG_NONINTERACTIVE) { break }
 
+    $dxgiIniCheck = Join-Path $FoundGameDir "dxgi.ini"
+    $isLowVramMode = $false
+    if (Test-Path $dxgiIniCheck) {
+        if ((Get-Content $dxgiIniCheck -Raw -ErrorAction SilentlyContinue) -match 'MaxSizeInMiB=3072') {
+            $isLowVramMode = $true
+        }
+    }
+    $vramLabel = if ($isLowVramMode) {
+        "Вернуть УЛЬТРА-квоты видеопамяти (кэш 8192 МБ + 4K тени 4096) [сейчас включён эконом-режим]"
+    } else {
+        "Переключить в эконом-режим под карты 4–8 ГБ VRAM (снизить пик кэша и тени до 2048)"
+    }
+
     Write-Host ""
-    Write-Host "  БЫСТРОЕ АВТО-ЛЕЧЕНИЕ В 1 КЛИК (без удаления файлов, 100% обратимо в Toggle_Mods.bat):" -ForegroundColor Cyan
-    Write-Host "   [1] Увеличить ожидание расшифровки SteamStub в WAX (200 мс -> 5000 мс) [рекомендуется всем!]" -ForegroundColor Green
-    Write-Host "   [2] Выключить NVIDIA DLAA / DLSS 4 (#13) [обязательно для AMD Radeon / GTX и при сбое D3D11]" -ForegroundColor Yellow
+    Write-Host "  ОПЦИОНАЛЬНОЕ АВТО-ЛЕЧЕНИЕ (система Windows НЕ затрагивается, файлы не удаляются, всё обратимо):" -ForegroundColor Cyan
+    Write-Host "   [1] Увеличить ожидание расшифровки SteamStub в WAX (200 мс -> 5000 мс) [100% безопасно, без минусов]" -ForegroundColor Green
+    Write-Host "   [2] Выключить NVIDIA DLAA / DLSS 4 (#13) [нужно для карт AMD Radeon / GTX и при сбое D3D11]" -ForegroundColor Yellow
     Write-Host "   [3] Выключить ReShade 5.8 (#8) [убирает вылеты оверлея ReShade при создании окна]" -ForegroundColor Yellow
-    Write-Host "   [4] Оптимизировать кэш видеопамяти под карты 4–8 ГБ VRAM (снизить пик VRAM и тени до 2048)" -ForegroundColor Yellow
-    Write-Host "   [5] ВКЛЮЧИТЬ «БЕЗОПАСНЫЙ СТАРТ» (применить пункты 1 + 2 + 3 сразу для гарантированного запуска)" -ForegroundColor Magenta
-    Write-Host "   [6] Обновить Microsoft Visual C++ 2015–2022 x64 автоматически через системный winget" -ForegroundColor Cyan
+    Write-Host "   [4] $vramLabel" -ForegroundColor Yellow
+    Write-Host "   [5] ВКЛЮЧИТЬ «БЕЗОПАСНЫЙ СТАРТ» (применить пункты 1 + 2 + 3 сразу для проверки запуска)" -ForegroundColor Magenta
+    Write-Host "   [6] Доустановить официальный пакет Microsoft Visual C++ 2015–2022 x64 (если отсутствует)" -ForegroundColor Cyan
     Write-Host "   [R] Перепроверить заново" -ForegroundColor Gray
-    Write-Host "   [0] Выход" -ForegroundColor DarkGray
+    Write-Host "   [0] Выход (ничего не менять)" -ForegroundColor DarkGray
     Write-Host "----------------------------------------------------------------------------" -ForegroundColor DarkGray
 
-    $ans = Read-Host "  Выберите действие (1-6, R или 0 для выхода)"
+    $ans = Read-Host "  Выберите действие (1-6, R или 0 для выхода без изменений)"
     if ($ans -eq "0" -or $ans -eq "") { break }
     if ($ans -match '^[RrКк]$') { continue }
+
+    $DiagBakDir = Join-Path $FoundGameDir "_Vanilla_Backup\Diag_Config_Backup"
 
     if ($ans -eq "1" -or $ans -eq "5") {
         $waxCfgP = Join-Path $FoundGameDir "wax\config.json"
         if (Test-Path $waxCfgP) {
+            if (-not (Test-Path $DiagBakDir)) { New-Item -ItemType Directory -Path $DiagBakDir -Force | Out-Null }
+            $bakW = Join-Path $DiagBakDir "wax_config.json.orig"
+            if (-not (Test-Path $bakW)) { Copy-Item -Path $waxCfgP -Destination $bakW -Force }
             $wTxt = [System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)
-            $wObj = $wTxt | ConvertFrom-Json
-            $wObj.steam_stub_timeout_ms = 5000
-            [System.IO.File]::WriteAllText($waxCfgP, ($wObj | ConvertTo-Json -Depth 10), (New-Object System.Text.UTF8Encoding($false)))
-            Write-Host "  [OK] Таймаут расшифровки SteamStub в wax\config.json увеличен до 5000 мс!" -ForegroundColor Green
+            $wTxt = [regex]::Replace($wTxt, '("steam_stub_timeout_ms"\s*:\s*)\d+', '${1}5000')
+            [System.IO.File]::WriteAllText($waxCfgP, $wTxt, (New-Object System.Text.UTF8Encoding($false)))
+            Write-Host "  [OK] Таймаут расшифровки SteamStub в wax\config.json увеличен до 5000 мс (резервная копия сохранена)!" -ForegroundColor Green
         }
     }
 
     if ($ans -eq "2" -or $ans -eq "5") {
         $did = Toggle-PackModOff -GameRoot $FoundGameDir -ModKey "DLAA_826" -RelFiles @("d3d11.dll","nvngx_dlss.dll","NIER_DLAA.ini")
         if ($did) {
-            Write-Host "  [OK] Модуль NVIDIA DLAA (#13) аккуратно переведён в ВЫКЛ (_Disabled_Mods\DLAA_826)!" -ForegroundColor Green
+            Write-Host "  [OK] Модуль NVIDIA DLAA (#13) аккуратно переведён в ВЫКЛ (вернуть в ВКЛ можно в любой момент через Toggle_Mods.bat)!" -ForegroundColor Green
         } else {
             Write-Host "  [i] NVIDIA DLAA (#13) уже был выключен." -ForegroundColor Gray
         }
@@ -949,37 +992,68 @@ while ($true) {
     if ($ans -eq "3" -or $ans -eq "5") {
         $did = Toggle-PackModOff -GameRoot $FoundGameDir -ModKey "ReShade_Engine" -RelFiles @("ReShade64.dll")
         if ($did) {
-            Write-Host "  [OK] Модуль ReShade (#8) аккуратно переведён в ВЫКЛ (_Disabled_Mods\ReShade_Engine)!" -ForegroundColor Green
+            Write-Host "  [OK] Модуль ReShade (#8) аккуратно переведён в ВЫКЛ (вернуть в ВКЛ можно в любой момент через Toggle_Mods.bat)!" -ForegroundColor Green
         } else {
             Write-Host "  [i] ReShade (#8) уже был выключен." -ForegroundColor Gray
         }
     }
 
     if ($ans -eq "4") {
+        if (-not (Test-Path $DiagBakDir)) { New-Item -ItemType Directory -Path $DiagBakDir -Force | Out-Null }
         $dxgiIniP = Join-Path $FoundGameDir "dxgi.ini"
-        if (Test-Path $dxgiIniP) {
-            $dxTxt = [System.IO.File]::ReadAllText($dxgiIniP, [System.Text.Encoding]::UTF8)
-            $dxTxt = $dxTxt -replace 'MaxSizeInMiB=\d+', 'MaxSizeInMiB=3072'
-            [System.IO.File]::WriteAllText($dxgiIniP, $dxTxt, (New-Object System.Text.UTF8Encoding($false)))
+        $waxCfgP  = Join-Path $FoundGameDir "wax\config.json"
+        $lodIniP  = Join-Path $FoundGameDir "LodMod.ini"
+
+        if (-not $isLowVramMode) {
+            if ((Test-Path $dxgiIniP) -and -not (Test-Path (Join-Path $DiagBakDir "dxgi.ini.orig"))) { Copy-Item $dxgiIniP (Join-Path $DiagBakDir "dxgi.ini.orig") -Force }
+            if ((Test-Path $waxCfgP)  -and -not (Test-Path (Join-Path $DiagBakDir "wax_config.json.orig"))) { Copy-Item $waxCfgP (Join-Path $DiagBakDir "wax_config.json.orig") -Force }
+            if ((Test-Path $lodIniP)  -and -not (Test-Path (Join-Path $DiagBakDir "LodMod.ini.orig"))) { Copy-Item $lodIniP (Join-Path $DiagBakDir "LodMod.ini.orig") -Force }
+
+            if (Test-Path $dxgiIniP) {
+                $dxTxt = [System.IO.File]::ReadAllText($dxgiIniP, [System.Text.Encoding]::UTF8)
+                $dxTxt = [regex]::Replace($dxTxt, '(?m)^(\s*MaxSizeInMiB\s*=\s*)\d+', '${1}3072')
+                [System.IO.File]::WriteAllText($dxgiIniP, $dxTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            if (Test-Path $waxCfgP) {
+                $wTxt = [System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)
+                $wTxt = [regex]::Replace($wTxt, '("max_injected_textures_vram_mb"\s*:\s*)\d+', '${1}2048')
+                [System.IO.File]::WriteAllText($waxCfgP, $wTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            if (Test-Path $lodIniP) {
+                $lTxt = [System.IO.File]::ReadAllText($lodIniP, [System.Text.Encoding]::UTF8)
+                $lTxt = [regex]::Replace($lTxt, '(?m)^(\s*ShadowResolution\s*=\s*)\d+', '${1}2048')
+                [System.IO.File]::WriteAllText($lodIniP, $lTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            Write-Host "  [OK] Включён эконом-режим под 4–8 ГБ VRAM (повторное нажатие [4] вернёт максимальные настройки 8192/4096)!" -ForegroundColor Green
+        } else {
+            if (Test-Path $dxgiIniP) {
+                $dxTxt = [System.IO.File]::ReadAllText($dxgiIniP, [System.Text.Encoding]::UTF8)
+                $dxTxt = [regex]::Replace($dxTxt, '(?m)^(\s*MaxSizeInMiB\s*=\s*)\d+', '${1}8192')
+                [System.IO.File]::WriteAllText($dxgiIniP, $dxTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            if (Test-Path $waxCfgP) {
+                $wTxt = [System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)
+                $wTxt = [regex]::Replace($wTxt, '("max_injected_textures_vram_mb"\s*:\s*)\d+', '${1}4096')
+                [System.IO.File]::WriteAllText($waxCfgP, $wTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            if (Test-Path $lodIniP) {
+                $lTxt = [System.IO.File]::ReadAllText($lodIniP, [System.Text.Encoding]::UTF8)
+                $lTxt = [regex]::Replace($lTxt, '(?m)^(\s*ShadowResolution\s*=\s*)\d+', '${1}4096')
+                [System.IO.File]::WriteAllText($lodIniP, $lTxt, (New-Object System.Text.UTF8Encoding($false)))
+            }
+            Write-Host "  [OK] Максимальные УЛЬТРА-настройки сборки (кэш 8192 МБ, WAX 4096 МБ, тени 4096) полностью восстановлены!" -ForegroundColor Green
         }
-        $waxCfgP = Join-Path $FoundGameDir "wax\config.json"
-        if (Test-Path $waxCfgP) {
-            $wObj = ([System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)) | ConvertFrom-Json
-            $wObj.max_injected_textures_vram_mb = 2048
-            [System.IO.File]::WriteAllText($waxCfgP, ($wObj | ConvertTo-Json -Depth 10), (New-Object System.Text.UTF8Encoding($false)))
-        }
-        $lodIniP = Join-Path $FoundGameDir "LodMod.ini"
-        if (Test-Path $lodIniP) {
-            $lTxt = [System.IO.File]::ReadAllText($lodIniP, [System.Text.Encoding]::UTF8)
-            $lTxt = $lTxt -replace 'ShadowResolution\s*=\s*\d+', 'ShadowResolution = 2048'
-            [System.IO.File]::WriteAllText($lodIniP, $lTxt, (New-Object System.Text.UTF8Encoding($false)))
-        }
-        Write-Host "  [OK] Лимиты видеопамяти адаптированы под карты 4–8 ГБ VRAM (кэш SK: 3072 МБ, WAX: 2048 МБ, тени: 2048)!" -ForegroundColor Green
     }
 
     if ($ans -eq "6") {
-        Write-Host "  [*] Запускаю официальное обновление Microsoft Visual C++ 2015-2022 x64 через winget..." -ForegroundColor Cyan
-        & winget install --id Microsoft.VCRedist.2015+.x64 -e --accept-package-agreements --accept-source-agreements
+        $vcDllCheck = Join-Path (Join-Path $env:SystemRoot "System32") "msvcp140_atomic_wait.dll"
+        if (Test-Path $vcDllCheck) {
+            $vcV = (Get-Item $vcDllCheck).VersionInfo.FileVersion
+            Write-Host "  [i] В вашей Windows УЖЕ установлена свежая библиотека Visual C++ 2022 (v$vcV). Обновление не требуется!" -ForegroundColor Green
+        } else {
+            Write-Host "  [*] Запускаю официальную установку Microsoft Visual C++ 2015-2022 x64 через встроенный менеджер Windows (winget)..." -ForegroundColor Cyan
+            & winget install --id Microsoft.VCRedist.2015+.x64 -e --accept-package-agreements --accept-source-agreements
+        }
     }
 
     Start-Sleep -Seconds 2
