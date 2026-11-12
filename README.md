@@ -140,9 +140,12 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 ## 5. Установка в 1 клик
 
 1. Установите чистую лицензионную версию **NieR:Automata** в Steam *(рекомендуется один раз запустить до главного меню и закрыть игру)*.
-2. Скачайте папку **`NieR_Automata_Ultimate_ModPack`** через [`.torrent`-файл](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(желательно на тот же NTFS-диск, где установлена игра)*.
+2. Скачайте сборку из облака ([Buzzheavier](https://buzzheavier.com/qvkzqsh4isxv) / [Archive.org](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)) и распакуйте папку **`NieR_Automata_Ultimate_ModPack`**, либо скачайте её готовой папкой через [`.torrent`-файл](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(желательно на тот же NTFS-диск, где установлена игра)*.
 3. Запустите **`Install_NieR_Mods.bat`** *(в окне Windows SmartScreen нажмите «Подробнее» -> «Выполнить в любом случае»)*.
 4. Дождитесь завершения проверки целостности всех 25 узлов (`УСПЕШНО! Все моды установлены и настроены!`) и запускайте игру кнопкой **«ИГРАТЬ»** в Steam!
+
+> [!WARNING]
+> **Важно для сохранений в самой игре (особенность ПК-версии *NieR:Automata*):** в 40-минутном Прологе нет автосохранений, а сейвы игра записывает в системную папку `Документы\My Games\NieR_Automata`. Если в «Безопасности Windows» у вас включён **«Контролируемый доступ к папкам»** (*Защита от вирусов и угроз → Управление защитой от программ-шантажистов*), Защитник Windows может заблокировать создание сохранения. Перед началом новой игры убедитесь, что эта опция отключена, либо добавьте `NieRAutomata.exe` в список разрешённых приложений.
 
 ---
 
