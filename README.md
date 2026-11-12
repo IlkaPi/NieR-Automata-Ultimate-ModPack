@@ -7,6 +7,7 @@
 [![Скачать ZIP (Быстрое облако)](https://img.shields.io/badge/Скачать_ZIP_(Быстрое_облако)-Без_лимита_скорости_•_58.94_ГБ-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
 [![Зеркало Archive.org](https://img.shields.io/badge/Зеркало_ZIP-Archive.org_(58.94_ГБ)-4285F4?style=for-the-badge&logo=internetarchive)](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)
 [![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-Готовой_папкой-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
+[![Диагностика вылетов](https://img.shields.io/badge/Диагностика_вылетов-Diagnose__Crash.bat_(1_клик)-e53935?style=for-the-badge&logo=windows-terminal)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Diagnose_Crash.bat)
 [![Исходный код установщика](https://img.shields.io/badge/Код_установщика-PowerShell_(Open_Source)-5391FE?style=for-the-badge&logo=powershell)](scripts_preview/)
 
 ---
@@ -146,6 +147,12 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 
 > [!WARNING]
 > **Важно для сохранений в самой игре (особенность ПК-версии *NieR:Automata*):** в 40-минутном Прологе нет автосохранений, а сейвы игра записывает в системную папку `Документы\My Games\NieR_Automata`. Если в «Безопасности Windows» у вас включён **«Контролируемый доступ к папкам»** (*Защита от вирусов и угроз → Управление защитой от программ-шантажистов*), Защитник Windows может заблокировать создание сохранения. Перед началом новой игры убедитесь, что эта опция отключена, либо добавьте `NieRAutomata.exe` в список разрешённых приложений.
+
+### Если игра вылетает или не запускается — Глубокая автодиагностика (`Diagnose_Crash.bat`)
+
+Если после установки игра закрывается на старте или выдаёт ошибку, скачайте автономный 7-уровневый анализатор **[Diagnose_Crash.bat](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Diagnose_Crash.bat)** *(один файл ~38 КБ, можно запускать из любой папки)*:
+* За **3 секунды** проверяет подлинность Steam-базы и всех 24 архивов `.cpk`, контрольные суммы `SHA-256` всех `.dll` сборки, карантин Защитника Windows, посторонние старые моды, системные библиотеки `VC++ 2022` (`msvcp140_atomic_wait.dll`) и `Media Feature Pack`, реальный объём VRAM, файл подкачки, привязку видеокарты в `Graphic.ini`, пошаговые логи запуска всех модулей (`dxgi.log`, `wax.log`, `NIER_DLAA.log`, `LodMod.log`, `ReShade.log`), дампы `logs\crash\` и системный Журнал событий Windows (`Event ID 1000`).
+* Показывает простым русским языком **точный этап сбоя + конкретного виновника** и позволяет **в 1 нажатие клавиши** прямо из окна исправить проблему (увеличить таймаут расшифровки SteamStub в WAX, отключить `NVIDIA DLAA` для карт AMD/GTX, отключить `ReShade` или адаптировать кэш под 4–8 ГБ VRAM).
 
 ---
 
