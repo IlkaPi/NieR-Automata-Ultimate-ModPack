@@ -4,17 +4,28 @@
 
 > **Комплексное техническое и графическое переиздание ПК-версии *NieR:Automata* с автоматической установкой в 1 клик (`Install_NieR_Mods.bat`), полной русской локализацией в 4K и интерактивным менеджером модулей (`Toggle_Mods.bat`).**
 
-[![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-58.94_ГБ_(v1.0)-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
+[![Скачать напрямую (Buzzheavier)](https://img.shields.io/badge/Скачать_ZIP_(Быстро)-Buzzheavier_58.94_ГБ-ff6b00?style=for-the-badge&logo=cloud)](https://buzzheavier.com/qvkzqsh4isxv)
+[![Зеркало Archive.org](https://img.shields.io/badge/Вечное_зеркало_(ZIP)-Archive.org_58.94_ГБ-4285F4?style=for-the-badge&logo=internetarchive)](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026)
+[![Скачать .torrent](https://img.shields.io/badge/Скачать_.torrent-Готовой_папкой_(v1.0)-2ea043?style=for-the-badge&logo=bittorrent)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent)
 [![Видео геймплея 60 FPS](https://img.shields.io/badge/Видео_демонстрация-Пролог_&_2K_60FPS_катсцена_(MP4)-e34c26?style=for-the-badge&logo=youtube)](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4)
 [![Исходный код установщика](https://img.shields.io/badge/Код_установщика-PowerShell_(Open_Source)-5391FE?style=for-the-badge&logo=powershell)](scripts_preview/)
 
 ---
 
-## Скачать сборку (BitTorrent / Magnet)
+## Скачать сборку (Прямые облачные ссылки + BitTorrent)
 
+### Вариант 1 — Высокоскоростные облачные зеркала (`.zip` без сжатия, 24/7):
+* **Зеркало 1 — Buzzheavier (максимальная скорость в браузере / FDM / IDM):** [**Скачать NieR_Automata_Ultimate_ModPack_2026.zip (58.94 ГБ)**](https://buzzheavier.com/qvkzqsh4isxv)
+* **Зеркало 2 — Internet Archive (вечное хранение, страница релиза):** [**archive.org/details/nie-r-automata-ultimate-mod-pack-2026**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) *([прямая ссылка на `.zip` в 1 клик](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip))*
+* **Облачный `.torrent` с круглосуточным Веб-сидом серверов Archive.org (работает 24/7 без ожидания сидов):** [**nie-r-automata-ultimate-mod-pack-2026_archive.torrent**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/nie-r-automata-ultimate-mod-pack-2026_archive.torrent)
+* **Контрольные суммы `.zip` (`63 291 011 102` байт):**
+  * `MD5`: `13706eabbeca8fd16d8173db1322f0ab`
+  * `SHA-256`: `ac8f0f04ff21a125833b06f5d142497ada1a56712e296b21f555673a47b3681d`
+
+### Вариант 2 — Раздача сразу готовой папкой без архивации (`0 ГБ` на распаковку):
 * **Файл раздачи (`.torrent`):** [**NieR_Automata_Ultimate_ModPack_2026.torrent**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/NieR_Automata_Ultimate_ModPack_2026.torrent) *(434 КБ — [прямое зеркало из репозитория](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/raw/main/NieR_Automata_Ultimate_ModPack_2026.torrent))*
 * **Видео-превью (геймплей пролога + переход в 2K 60 FPS катсцену появления 2B):** [**Gameplay_Preview_Prologue_60FPS.mp4**](https://github.com/IlkaPi/NieR-Automata-Ultimate-ModPack/releases/latest/download/Gameplay_Preview_Prologue_60FPS.mp4) *(252 МБ)*
-* **Объём дистрибутива:** **58.94 ГБ** (`63 289 735 980` байт, `3 480` файлов — поставляется готовой папкой без архивации)
+* **Объём дистрибутива:** **58.94 ГБ** (`63 289 735 980` байт, `3 480` файлов)
 * **InfoHash (SHA-1):** `0f5449d15e0b0d702dd1feba1807a167348ee7e5`
 
 <details>
@@ -27,7 +38,7 @@ magnet:?xt=urn:btih:0f5449d15e0b0d702dd1feba1807a167348ee7e5&dn=NieR_Automata_Ul
 </details>
 
 > [!TIP]
-> **Интеллектуальная установка в 0 ГБ лишнего места:** качайте папку сборки **на тот же NTFS-диск**, где установлена *NieR:Automata* в Steam. Установщик `Install_NieR_Mods.bat` автоматически свяжет 54 ГБ текстур и видеороликов через **жёсткие ссылки NTFS** за несколько секунд — без дублирования места на диске и **без прерывания раздачи в торрент-клиенте**!
+> **Интеллектуальная установка в 0 ГБ лишнего места:** поместите папку `NieR_Automata_Ultimate_ModPack` **на тот же NTFS-диск**, где установлена *NieR:Automata* в Steam (если скачивали `.zip`-архивом — распакуйте его на этот диск, после чего сам `.zip` можно сразу удалить). Установщик `Install_NieR_Mods.bat` автоматически свяжет 54 ГБ текстур и видеороликов через **жёсткие ссылки NTFS** за несколько секунд — без дублирования места на диске!
 
 ---
 
