@@ -15,9 +15,9 @@
 ## Скачать сборку (Прямые облачные ссылки + BitTorrent)
 
 ### Вариант 1 — Высокоскоростные облачные зеркала (`.zip` без сжатия, 24/7):
-* **Зеркало 1 — Buzzheavier (максимальная скорость в браузере / FDM / IDM):** [**Скачать NieR_Automata_Ultimate_ModPack_2026.zip (58.94 ГБ)**](https://buzzheavier.com/qvkzqsh4isxv)
-* **Зеркало 2 — Internet Archive (вечное хранение, страница релиза):** [**archive.org/details/nie-r-automata-ultimate-mod-pack-2026**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) *([прямая ссылка на `.zip` в 1 клик](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip))*
-* **Облачный `.torrent` с круглосуточным Веб-сидом серверов Archive.org (работает 24/7 без ожидания сидов):** [**nie-r-automata-ultimate-mod-pack-2026_archive.torrent**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/nie-r-automata-ultimate-mod-pack-2026_archive.torrent)
+* **Зеркало 1 — Buzzheavier (рекомендуется для браузера — макс. скорость с европейских серверов):** [**Скачать NieR_Automata_Ultimate_ModPack_2026.zip (58.94 ГБ)**](https://buzzheavier.com/qvkzqsh4isxv)
+* **Зеркало 2 — Облачный `.torrent` с Веб-сидом Archive.org (раздаётся 24/7 серверами Архива в несколько потоков ~15+ МБ/с без VPN и без ожидания сидов):** [**nie-r-automata-ultimate-mod-pack-2026_archive.torrent**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/nie-r-automata-ultimate-mod-pack-2026_archive.torrent)
+* **Зеркало 3 — Internet Archive (вечное хранение):** [**Страница релиза**](https://archive.org/details/nie-r-automata-ultimate-mod-pack-2026) | [**Прямая ссылка на `.zip`**](https://archive.org/download/nie-r-automata-ultimate-mod-pack-2026/NieR_Automata_Ultimate_ModPack_2026.zip) *(совет: в 1 поток из браузера без VPN сервера США дают ~0.6–1 МБ/с — качайте через Free Download Manager / IDM в 8–16 потоков или через облачный `.torrent` выше, скорость сразу вырастает до 13–20+ МБ/с!)*
 * **Контрольные суммы `.zip` (`63 291 011 102` байт):**
   * `MD5`: `13706eabbeca8fd16d8173db1322f0ab`
   * `SHA-256`: `ac8f0f04ff21a125833b06f5d142497ada1a56712e296b21f555673a47b3681d`
