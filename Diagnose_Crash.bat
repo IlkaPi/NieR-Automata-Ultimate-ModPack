@@ -134,7 +134,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 0 (Архив)" `
             "Скрипт запущен прямо из временной папки архиватора без распаковки!" `
             "WinRAR/7-Zip распаковывает только один кликнутый .bat во временную папку Temp, без остальных файлов." `
-            "Полностью распакуйте архив сборки на NTFS-диск через 7-Zip или WinRAR и запустите Установить_Моды.bat."
+            "Полностью распакуйте архив сборки на NTFS-диск через 7-Zip или WinRAR и запустите Install_NieR_Mods.bat."
     }
 
     $CandidatePaths = @()
@@ -222,17 +222,17 @@ function Run-FullForensicScan {
         }
     }
 
-    # Проверка ошибки "Матрёшка" (кинули папку Payload прямо в игру без запуска Установить_Моды.bat)
+    # Проверка ошибки "Матрёшка" (кинули папку Payload прямо в игру без запуска Install_NieR_Mods.bat)
     if ((Test-Path (Join-Path $GameDir "Payload\dxgi.dll")) -and -not (Test-Path (Join-Path $GameDir "dxgi.dll"))) {
         Add-Finding "CRITICAL" "Этап 0 (Установка)" `
             "Моды НЕ установлены: папка Payload просто скопирована внутрь папки игры!" `
             "Внутри NieRAutomata лежит подпапка Payload, но сами файлы в корень игры не развёрнуты." `
-            "Запустите файл Установить_Моды.bat двойным кликом и дождитесь надписи 'УСПЕШНО!'."
+            "Запустите файл Install_NieR_Mods.bat двойным кликом и дождитесь надписи 'УСПЕШНО!'."
     } elseif (-not (Test-Path (Join-Path $GameDir "dxgi.dll")) -and -not (Test-Path (Join-Path $GameDir "_Disabled_Mods")) -and -not (Test-Path (Join-Path $GameDir "wax"))) {
         Add-Finding "CRITICAL" "Этап 0 (Установка)" `
             "В найденной папке игры вообще нет файлов модпака!" `
-            "Либо Установить_Моды.bat ещё не запускался, либо моды были поставлены в другую копию игры на другом диске." `
-            "Запустите Установить_Моды.bat и проверьте строку '[1/4] Найдена папка игры'."
+            "Либо Install_NieR_Mods.bat ещё не запускался, либо моды были поставлены в другую копию игры на другом диске." `
+            "Запустите Install_NieR_Mods.bat и проверьте строку '[1/4] Найдена папка игры'."
     }
 
     # -------------------------------------------------------------------------
@@ -261,7 +261,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 0 (База игры)" `
             "Отсутствует файл steam_api64.dll в корне игры!" `
             "Либо это версия Microsoft Store / Xbox Game Pass (несовместимая со Steam-модами), либо антивирус удалил steam_api64.dll." `
-            "Если это Steam — сделайте проверку целостности файлов в Steam, затем заново запустите Установить_Моды.bat."
+            "Если это Steam — сделайте проверку целостности файлов в Steam, затем заново запустите Install_NieR_Mods.bat."
     } else {
         $sapiSize = (Get-Item $SteamApiPath).Length
         $sapiSha  = Get-QuickSha256 $SteamApiPath
@@ -285,7 +285,7 @@ function Run-FullForensicScan {
             Add-Finding "CRITICAL" "Этап 0 (EXE игры)" `
                 "Исполняемый файл NieRAutomata.exe ($exeSize байт) не соответствует Steam-патчу 7020666!" `
                 "Моды WAX, AutomataHighFPS, LodMod и NAIOM жёстко привязаны к адресам памяти билда 7020666 (17 837 952 байт)." `
-                "Запустите Установить_Моды.bat (он восстановит эталонный EXE) или проверьте целостность лицензии в Steam."
+                "Запустите Install_NieR_Mods.bat (он восстановит эталонный EXE) или проверьте целостность лицензии в Steam."
         }
     } else {
         Add-Finding "CRITICAL" "Этап 0 (EXE игры)" `
@@ -344,7 +344,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 0 (Битые архивы .cpk)" `
             "Повреждены или отличаются базовые архивы игры data\*.cpk!" `
             ("Не совпадают размеры: " + ($BadCpks -join "; ")) `
-            "Нажмите в Toggle_Mods.bat кнопку [R] (сброс к ванили), сделайте проверку целостности файлов в Steam, затем снова запустите Установить_Моды.bat."
+            "Нажмите в Toggle_Mods.bat кнопку [R] (сброс к ванили), сделайте проверку целостности файлов в Steam, затем снова запустите Install_NieR_Mods.bat."
     } else {
         Write-Both "  [OK] Все 24 базовых архива data\*.cpk побайтово совпадают с эталоном Steam 2021" Green
     }
@@ -386,7 +386,7 @@ function Run-FullForensicScan {
                 Add-Finding "CRITICAL" "Этап 1 (Подмена/порча .dll)" `
                     "Файл $($mb.File) ($($mb.Label)) повреждён или перезаписан чужим модом!" `
                     "Контрольная сумма SHA-256 не совпадает с эталоном сборки (текущий размер: $sz байт, эталон: $($mb.Size) байт). Чужая .dll с тем же именем ломает цепочку хуков и вызывает мгновенный вылет!" `
-                    "Перезапустите Установить_Моды.bat поверх папки игры (убедившись, что архив распаковался без ошибок)."
+                    "Перезапустите Install_NieR_Mods.bat поверх папки игры (убедившись, что архив распаковался без ошибок)."
             }
         } elseif ($disP -and (Test-Path $disP)) {
             Write-Both "  [--] $($mb.File) — штатно выключен через Toggle_Mods.bat ($($mb.Label))" DarkGray
@@ -411,7 +411,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 1 (Потерянные .dll / Антивирус)" `
             ("Из папки игры исчезли ключевые библиотеки: " + ($MissingDlls -join ", ")) `
             ("Файлов нет ни в корне игры, ни в _Disabled_Mods. Либо архив распаковался не до конца (не хватило места на диске), либо антивирус молча съел DLL-перехватчики в карантин!" + $DefQuarantine) `
-            "Добавьте папку NieRAutomata в исключения антивируса / Защитника Windows и заново запустите Установить_Моды.bat."
+            "Добавьте папку NieRAutomata в исключения антивируса / Защитника Windows и заново запустите Install_NieR_Mods.bat."
     }
 
     # Поиск ЧУЖИХ старых модов-паразитов в корне игры
@@ -435,7 +435,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 1 (Битая распаковка текстур)" `
             "Найдены пустые (0 байт) повреждённые 4K-текстуры (.dds): $($ZeroByteFiles.Count) шт.!" `
             "При распаковке 59 ГБ архива оборвалась запись (закончилось место во временной папке или сбой архиватора). При подгрузке битой .dds игра вылетает!" `
-            "Распакуйте архив сборки заново через 7-Zip (не встроенным Проводником Windows!) и запустите Установить_Моды.bat."
+            "Распакуйте архив сборки заново через 7-Zip (не встроенным Проводником Windows!) и запустите Install_NieR_Mods.bat."
     } elseif ($DdsTotal -gt 0) {
         Write-Both "  [OK] Текстурный банк SK_Res: $DdsTotal .dds файлов (пустых/оборванных 0-байтовых нет)" Green
     }
@@ -462,7 +462,7 @@ function Run-FullForensicScan {
         Add-Finding "CRITICAL" "Этап 2 (Повреждён JSON в WAX)" `
             ("Сломан синтаксис JSON-конфигов WAX: " + ($BrokenJsons -join ", ")) `
             "Модуль wax.dll аварийно завершается при чтении битого JSON." `
-            "Перезапустите Установить_Моды.bat для восстановления чистых конфигов."
+            "Перезапустите Install_NieR_Mods.bat для восстановления чистых конфигов."
     } elseif ($null -ne $WaxTimeoutMs) {
         Write-Both "  [OK] Все JSON-таблицы WAX валидны (steam_stub_timeout_ms = $WaxTimeoutMs мс)" Green
         if ($WaxTimeoutMs -le 500) {
@@ -708,7 +708,7 @@ function Run-FullForensicScan {
             Add-Finding "CRITICAL" "Этап 2 (Лог AutomataHighFPS)" `
                 "AutomataHighFPS сообщил 'unsupported game version'!" `
                 "Версия NieRAutomata.exe не совпадает с патчем 2021 года." `
-                "Запустите Установить_Моды.bat для восстановления совместимого EXE."
+                "Запустите Install_NieR_Mods.bat для восстановления совместимого EXE."
         }
 
         # Этап C: DirectX 11 + NVIDIA DLAA
