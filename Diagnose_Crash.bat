@@ -113,6 +113,144 @@ function Toggle-PackModOff {
     return $movedAny
 }
 
+function Test-WaxStdUserWriteAcl {
+    param([string]$CfgPath)
+    if (-not (Test-Path -LiteralPath $CfgPath)) { return $true }
+    try {
+        $curSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+        $acl = Get-Acl -LiteralPath $CfgPath -ErrorAction Stop
+        $hasStdUserWrite = $false
+        $hasDenyWrite = $false
+        foreach ($ace in $acl.Access) {
+            if (($ace.PropagationFlags -band [System.Security.AccessControl.PropagationFlags]::InheritOnly) -ne 0) { continue }
+            $sidVal = try { $ace.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value } catch { $ace.IdentityReference.Value }
+            $rightsInt = [int]$ace.FileSystemRights
+            $canWriteBit = (($rightsInt -band 2) -ne 0) -or (($rightsInt -band 0x40000000) -ne 0) -or (($rightsInt -band 0x10000000) -ne 0)
+            if ($ace.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Deny -and $canWriteBit) {
+                if ($sidVal -in @("S-1-5-32-545", "S-1-5-11", "S-1-1-0", $curSid)) { $hasDenyWrite = $true }
+            }
+            if ($ace.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow -and $canWriteBit) {
+                if ($sidVal -in @("S-1-5-32-545", "S-1-5-11", "S-1-1-0", $curSid)) { $hasStdUserWrite = $true }
+            }
+        }
+        return ((-not $hasDenyWrite) -and $hasStdUserWrite)
+    } catch {
+        return $true
+    }
+}
+
+function Invoke-UnlockGameWritePermissions {
+    param([string]$GameRoot)
+    $hungProc = Get-Process -Name "NieRAutomata" -ErrorAction SilentlyContinue
+    if ($hungProc) {
+        Write-Host "  [*] Закрываю зависший в фоне процесс NieRAutomata.exe для освобождения файлов..." -ForegroundColor Yellow
+        Stop-Process -Name "NieRAutomata" -Force -ErrorAction SilentlyContinue
+        Start-Sleep -Milliseconds 600
+    }
+
+    $curSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    $gDirB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($GameRoot))
+    $uSidB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($curSid))
+
+    $workerScript = @"
+`$ErrorActionPreference = 'SilentlyContinue'
+`$gDir = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$gDirB64'))
+`$uSid = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$uSidB64'))
+`$waxDir = Join-Path `$gDir 'wax'
+`$waxCfg = Join-Path `$gDir 'wax\config.json'
+`$logsDir = Join-Path `$gDir 'logs'
+if (-not (Test-Path -LiteralPath `$logsDir)) { New-Item -ItemType Directory -Path `$logsDir -Force | Out-Null }
+
+& attrib.exe -R -H -S "`$gDir" | Out-Null
+if (Test-Path -LiteralPath `$waxDir) {
+    & attrib.exe -R -H -S "`$waxDir" | Out-Null
+    & attrib.exe -R -H -S "`$waxDir\*" /S /D | Out-Null
+    Get-ChildItem -LiteralPath `$waxDir -Recurse -Force | ForEach-Object {
+        if (-not `$_.PSIsContainer) { `$_.Attributes = [IO.FileAttributes]::Normal }
+        Unblock-File -LiteralPath `$_.FullName
+    }
+}
+if (Test-Path -LiteralPath `$logsDir) {
+    & attrib.exe -R -H -S "`$logsDir" | Out-Null
+    & attrib.exe -R -H -S "`$logsDir\*" /S /D | Out-Null
+}
+Get-ChildItem -LiteralPath `$gDir -File -Force | Where-Object { `$_.Extension -in @('.ini','.json','.dll','.exe') } | ForEach-Object {
+    if (`$_.Extension -in @('.ini','.json')) { `$_.Attributes = [IO.FileAttributes]::Normal }
+    Unblock-File -LiteralPath `$_.FullName
+}
+
+& icacls.exe "`$gDir" /grant "*S-1-5-32-545:(OI)(CI)M" /grant "*S-1-5-11:(OI)(CI)M" /grant "*`${uSid}:(OI)(CI)F" /C /Q | Out-Null
+if (Test-Path -LiteralPath `$waxDir) {
+    & icacls.exe "`$waxDir" /inheritance:e /grant "*S-1-5-32-545:(OI)(CI)F" /grant "*S-1-5-11:(OI)(CI)F" /grant "*`${uSid}:(OI)(CI)F" /T /C /Q | Out-Null
+}
+if (Test-Path -LiteralPath `$waxCfg) {
+    & icacls.exe "`$waxCfg" /reset /C /Q | Out-Null
+    & icacls.exe "`$waxCfg" /inheritance:e /grant "*S-1-5-32-545:F" /grant "*S-1-5-11:F" /grant "*`${uSid}:F" /C /Q | Out-Null
+}
+if (Test-Path -LiteralPath `$logsDir) {
+    & icacls.exe "`$logsDir" /inheritance:e /grant "*S-1-5-32-545:(OI)(CI)F" /grant "*S-1-5-11:(OI)(CI)F" /grant "*`${uSid}:(OI)(CI)F" /T /C /Q | Out-Null
+}
+
+try {
+    `$mp = Get-MpPreference -ErrorAction Stop
+    `$exeP = Join-Path `$gDir 'NieRAutomata.exe'
+    if (`$mp.EnableControlledFolderAccess -eq 1 -and (Test-Path -LiteralPath `$exeP)) {
+        Add-MpPreference -ControlledFolderAccessAllowedApplications `$exeP -ErrorAction SilentlyContinue
+    }
+} catch {}
+
+if (Test-Path -LiteralPath `$waxCfg) {
+    `$rawW = [IO.File]::ReadAllText(`$waxCfg, [Text.Encoding]::UTF8)
+    `$rawW = [regex]::Replace(`$rawW, '("steam_stub_timeout_ms"\s*:\s*)\d+', '`${1}5000')
+    [IO.File]::WriteAllText(`$waxCfg, `$rawW, (New-Object System.Text.UTF8Encoding(`$false)))
+}
+"@
+
+    # Шаг 1: пробуем применить в текущем процессе
+    & ([ScriptBlock]::Create($workerScript))
+
+    $waxCfgCheck = Join-Path $GameRoot "wax\config.json"
+    $writeOk = $false
+    $fs = $null
+    try {
+        if (Test-Path -LiteralPath $waxCfgCheck) {
+            $fs = [IO.File]::Open($waxCfgCheck, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite, [IO.FileShare]::ReadWrite)
+            $writeOk = $true
+        }
+    } catch { $writeOk = $false } finally { if ($null -ne $fs) { $fs.Dispose() } }
+    $aclOk = Test-WaxStdUserWriteAcl -CfgPath $waxCfgCheck
+
+    # Шаг 2: если игра лежит в защищённой системной папке (C:\Program Files (x86)) и нужны права Администратора (UAC)
+    if ((-not $isAdmin) -and ((-not $writeOk) -or (-not $aclOk) -or ($GameRoot -match 'Program Files'))) {
+        Write-Host "  [*] Папка игры защищена Windows — запрашиваю права Администратора (нажмите 'Да' в окне UAC)..." -ForegroundColor Yellow
+        $enc = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($workerScript))
+        try {
+            Start-Process -FilePath "powershell.exe" -Verb RunAs -Wait -WindowStyle Hidden -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", $enc) -ErrorAction Stop
+        } catch {
+            Write-Host "  [!] Окно запроса прав Администратора (UAC) было отклонено: $($_.Exception.Message)" -ForegroundColor Red
+        }
+        $fs2 = $null
+        try {
+            if (Test-Path -LiteralPath $waxCfgCheck) {
+                $fs2 = [IO.File]::Open($waxCfgCheck, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite, [IO.FileShare]::ReadWrite)
+                $writeOk = $true
+            }
+        } catch { $writeOk = $false } finally { if ($null -ne $fs2) { $fs2.Dispose() } }
+        $aclOk = Test-WaxStdUserWriteAcl -CfgPath $waxCfgCheck
+    }
+
+    if ($writeOk -and $aclOk) {
+        Write-Host "  [OK] Права записи на папку игры и wax\config.json ПОЛНОСТЬЮ РАЗБЛОКИРОВАНЫ!" -ForegroundColor Green
+        Write-Host "       Ошибка 'WAX Panicked: PermissionDenied (Отказано в доступе)' устранена — запускайте игру в Steam!" -ForegroundColor Green
+        return $true
+    } else {
+        Write-Host "  [!] Запись в wax\config.json всё ещё блокируется (возможно, сторонним антивирусом типа Kaspersky / Dr.Web)." -ForegroundColor Red
+        Write-Host "      Добавьте папку '$GameRoot' в исключения вашего антивируса и повторите пункт [7]." -ForegroundColor Yellow
+        return $false
+    }
+}
+
 function Run-FullForensicScan {
     $ReportLines.Clear()
     $CriticalIssues.Clear()
@@ -440,12 +578,19 @@ function Run-FullForensicScan {
         Write-Both "  [OK] Текстурный банк SK_Res: $DdsTotal .dds файлов (пустых/оборванных 0-байтовых нет)" Green
     }
 
-    # Проверка синтаксиса всех JSON-конфигов WAX
+    # Проверка синтаксиса всех JSON-конфигов WAX + прав ЗАПИСИ в wax\config.json (PermissionDenied / code 5)
     $BrokenJsons = @()
     $WaxTimeoutMs = $null
     $WaxMaxVramMb = $null
+    $WaxCfgPath = Join-Path $GameDir "wax\config.json"
+    $WaxWriteIssues = @()
+
     if (Test-Path (Join-Path $GameDir "wax")) {
-        Get-ChildItem -Path (Join-Path $GameDir "wax") -Filter "*.json" -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+        $waxDirItem = Get-Item -LiteralPath (Join-Path $GameDir "wax") -Force -ErrorAction SilentlyContinue
+        if ($waxDirItem -and (($waxDirItem.Attributes -band [IO.FileAttributes]::ReadOnly) -ne 0)) {
+            $WaxWriteIssues += "на самой папке wax стоит атрибут ReadOnly"
+        }
+        Get-ChildItem -Path (Join-Path $GameDir "wax") -Filter "*.json" -Recurse -Force -ErrorAction SilentlyContinue | ForEach-Object {
             try {
                 $rawJ = [System.IO.File]::ReadAllText($_.FullName, [System.Text.Encoding]::UTF8)
                 $parsed = $rawJ | ConvertFrom-Json -ErrorAction Stop
@@ -458,6 +603,54 @@ function Run-FullForensicScan {
             }
         }
     }
+
+    if (Test-Path -LiteralPath $WaxCfgPath) {
+        $cfgItem = Get-Item -LiteralPath $WaxCfgPath -Force -ErrorAction SilentlyContinue
+        if ($cfgItem -and (($cfgItem.Attributes -band ([IO.FileAttributes]::ReadOnly -bor [IO.FileAttributes]::Hidden -bor [IO.FileAttributes]::System)) -ne 0)) {
+            $WaxWriteIssues += "на файле wax\config.json установлен атрибут 'Только чтение' / системный ($($cfgItem.Attributes))"
+        }
+        # Реальный тест открытия wax\config.json на запись
+        $fsTest = $null
+        try {
+            $fsTest = [System.IO.File]::Open($WaxCfgPath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::ReadWrite)
+        } catch {
+            $WaxWriteIssues += "прямая проверка записи вернула отказ Windows ($($_.Exception.Message))"
+        } finally {
+            if ($null -ne $fsTest) { $fsTest.Dispose() }
+        }
+        # Проверка NTFS ACL для обычного не-админского запуска из Steam (ловит C:\Program Files (x86), даже если сам диагност запущен от Админа!)
+        try {
+            $curSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+            $acl = Get-Acl -LiteralPath $WaxCfgPath -ErrorAction Stop
+            $hasStdUserWrite = $false
+            $hasDenyWrite = $false
+            foreach ($ace in $acl.Access) {
+                $isInheritOnly = (($ace.PropagationFlags -band [System.Security.AccessControl.PropagationFlags]::InheritOnly) -ne 0)
+                if ($isInheritOnly) { continue }
+                $sidVal = try { $ace.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value } catch { $ace.IdentityReference.Value }
+                $rightsInt = [int]$ace.FileSystemRights
+                $canWriteBit = (($rightsInt -band 2) -ne 0) -or (($rightsInt -band 0x40000000) -ne 0) -or (($rightsInt -band 0x10000000) -ne 0)
+                if ($ace.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Deny -and $canWriteBit) {
+                    if ($sidVal -in @("S-1-5-32-545", "S-1-5-11", "S-1-1-0", $curSid)) { $hasDenyWrite = $true }
+                }
+                if ($ace.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow -and $canWriteBit) {
+                    if ($sidVal -in @("S-1-5-32-545", "S-1-5-11", "S-1-1-0", $curSid)) { $hasStdUserWrite = $true }
+                }
+            }
+            if ($hasDenyWrite -or (-not $hasStdUserWrite)) {
+                $WaxWriteIssues += "в NTFS-правах папки игры (например, C:\Program Files (x86)) у обычного пользователя Steam нет прав на перезапись wax\config.json"
+            }
+        } catch {}
+    }
+
+    if ($WaxWriteIssues.Count -gt 0) {
+        Write-Both ("  [КРИТИЧНО] Блокировка записи в wax\config.json (PermissionDenied / Отказано в доступе): " + ($WaxWriteIssues -join "; ")) Red
+        Add-Finding "CRITICAL" "Этап 2 (WAX Panicked: PermissionDenied / Отказано в доступе!)" `
+            "Windows запрещает модулю WAX перезаписать файл wax\config.json при старте игры (Os { code: 5, kind: PermissionDenied })!" `
+            ("Причина: " + ($WaxWriteIssues -join "; ") + ". Из-за отказа в записи WAX аварийно отключается с окном 'WAX Panicked!', его расширитель памяти (Limit Break) не срабатывает, и следом игра выдаёт 'Ran out of memory while loading pl\pl0000.dtt' и зависает на бесконечном 'ЗАПУСК СИСТЕМЫ...'!") `
+            "Нажмите цифру [7] в меню ниже — скрипт автоматически снимет 'Только чтение' и выдаст полные права записи папке игры (подтвердите окно UAC 'Да', если появится)!"
+    }
+
     if ($BrokenJsons.Count -gt 0) {
         Add-Finding "CRITICAL" "Этап 2 (Повреждён JSON в WAX)" `
             ("Сломан синтаксис JSON-конфигов WAX: " + ($BrokenJsons -join ", ")) `
@@ -667,9 +860,11 @@ function Run-FullForensicScan {
 
         $dxgiTxt = if ((Test-Path $DxgiLogP) -and ((Get-Item $DxgiLogP).LastWriteTime -ge $SessionCutoff)) { Get-Content $DxgiLogP -Raw -ErrorAction SilentlyContinue } else { "" }
         $waxTxt  = ""
+        $waxHadBootHeader = $false
         if ($WaxLogObj -and ($WaxLogObj.LastWriteTime -ge $SessionCutoff)) {
             # Берём СТРОГО ПОСЛЕДНИЙ запуск внутри суточного wax.log (по маркеру 'Loaded WAX version:')!
             $waxFull = [System.IO.File]::ReadAllText($WaxLogObj.FullName, [System.Text.Encoding]::UTF8)
+            if ($waxFull -match 'Loaded WAX version:') { $waxHadBootHeader = $true }
             $waxRuns = [regex]::Split($waxFull, '(?m)^.*Loaded WAX version:.*$')
             $waxTxt  = if ($waxRuns.Count -gt 1) { $waxRuns[$waxRuns.Count - 1] } else { $waxFull }
         }
@@ -700,6 +895,12 @@ function Run-FullForensicScan {
                 "Используйте лицензионный Steam-билд 7020666."
         } elseif ($waxTxt -match 'Patches applied, starting game') {
             Write-Both "    [ШАГ 2: ПРОЙДЕН] SteamStub расшифрован, патчи памяти WAX и HighFPS успешно применены" Green
+        } elseif ($waxTxt -match 'PermissionDenied|Failed to write config|Отказано в доступе' -or ($waxHadBootHeader -and ($waxTxt -notmatch 'Loaded config:'))) {
+            Write-Both "    [ШАГ 2: СБОЙ!]   WAX УПАЛ НА ПЕРЕЗАПИСИ wax\config.json (PermissionDenied / Отказано в доступе)!" Red
+            Add-Finding "CRITICAL" "Этап 2 (Подтверждено логом WAX: сбой записи wax\config.json / PermissionDenied!)" `
+                "Лог wax.log оборвался сразу после 'Loaded WAX version:' перед чтением/записью конфига (ошибка 'WAX Panicked! Failed to write config to json file: PermissionDenied')!" `
+                "Windows или антивирус не дали игре перезаписать файл wax\config.json (обычно в C:\Program Files (x86)\... или из-за атрибута 'Только чтение'). Без WAX следом вылетает 'Ran out of memory while loading pl\pl0000.dtt' и игра виснет на 'ЗАПУСК СИСТЕМЫ...'!" `
+                "Нажмите цифру [7] в меню ниже — скрипт разблокирует права записи на папку игры и wax\config.json в 1 клик!"
         } elseif ($waxTxt) {
             Write-Both "    [ШАГ 2: ОБОРВАН] WAX начал загрузку, но оборвался до запуска игры!" Red
         }
@@ -955,28 +1156,38 @@ while ($true) {
     Write-Host "   [2] Выключить NVIDIA DLAA / DLSS 4 (#13) [нужно для карт AMD Radeon / GTX и при сбое D3D11]" -ForegroundColor Yellow
     Write-Host "   [3] Выключить ReShade 5.8 (#8) [убирает вылеты оверлея ReShade при создании окна]" -ForegroundColor Yellow
     Write-Host "   [4] $vramLabel" -ForegroundColor Yellow
-    Write-Host "   [5] ВКЛЮЧИТЬ «БЕЗОПАСНЫЙ СТАРТ» (применить пункты 1 + 2 + 3 сразу для проверки запуска)" -ForegroundColor Magenta
+    Write-Host "   [5] ВКЛЮЧИТЬ «БЕЗОПАСНЫЙ СТАРТ» (применить пункты 7 + 1 + 2 + 3 сразу для проверки запуска)" -ForegroundColor Magenta
     Write-Host "   [6] Доустановить официальный пакет Microsoft Visual C++ 2015–2022 x64 (если отсутствует)" -ForegroundColor Cyan
+    Write-Host "   [7] Разблокировать права записи папки игры и wax\config.json [лечит WAX Panicked: PermissionDenied / pl0000.dtt]" -ForegroundColor Green
     Write-Host "   [R] Перепроверить заново" -ForegroundColor Gray
     Write-Host "   [0] Выход (ничего не менять)" -ForegroundColor DarkGray
     Write-Host "----------------------------------------------------------------------------" -ForegroundColor DarkGray
 
-    $ans = Read-Host "  Выберите действие (1-6, R или 0 для выхода без изменений)"
+    $ans = Read-Host "  Выберите действие (1-7, R или 0 для выхода без изменений)"
     if ($ans -eq "0" -or $ans -eq "") { break }
     if ($ans -match '^[RrКк]$') { continue }
 
     $DiagBakDir = Join-Path $FoundGameDir "_Vanilla_Backup\Diag_Config_Backup"
 
+    if ($ans -eq "7" -or $ans -eq "5") {
+        Invoke-UnlockGameWritePermissions -GameRoot $FoundGameDir | Out-Null
+    }
+
     if ($ans -eq "1" -or $ans -eq "5") {
         $waxCfgP = Join-Path $FoundGameDir "wax\config.json"
         if (Test-Path $waxCfgP) {
-            if (-not (Test-Path $DiagBakDir)) { New-Item -ItemType Directory -Path $DiagBakDir -Force | Out-Null }
-            $bakW = Join-Path $DiagBakDir "wax_config.json.orig"
-            if (-not (Test-Path $bakW)) { Copy-Item -Path $waxCfgP -Destination $bakW -Force }
-            $wTxt = [System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)
-            $wTxt = [regex]::Replace($wTxt, '("steam_stub_timeout_ms"\s*:\s*)\d+', '${1}5000')
-            [System.IO.File]::WriteAllText($waxCfgP, $wTxt, (New-Object System.Text.UTF8Encoding($false)))
-            Write-Host "  [OK] Таймаут расшифровки SteamStub в wax\config.json увеличен до 5000 мс (резервная копия сохранена)!" -ForegroundColor Green
+            try {
+                if (-not (Test-Path $DiagBakDir)) { New-Item -ItemType Directory -Path $DiagBakDir -Force | Out-Null }
+                $bakW = Join-Path $DiagBakDir "wax_config.json.orig"
+                if (-not (Test-Path $bakW)) { Copy-Item -Path $waxCfgP -Destination $bakW -Force }
+                $wTxt = [System.IO.File]::ReadAllText($waxCfgP, [System.Text.Encoding]::UTF8)
+                $wTxt = [regex]::Replace($wTxt, '("steam_stub_timeout_ms"\s*:\s*)\d+', '${1}5000')
+                [System.IO.File]::WriteAllText($waxCfgP, $wTxt, (New-Object System.Text.UTF8Encoding($false)))
+                Write-Host "  [OK] Таймаут расшифровки SteamStub в wax\config.json увеличен до 5000 мс (резервная копия сохранена)!" -ForegroundColor Green
+            } catch {
+                Write-Host "  [!] Обнаружена блокировка записи wax\config.json — запускаю разблокировку прав [7]..." -ForegroundColor Yellow
+                Invoke-UnlockGameWritePermissions -GameRoot $FoundGameDir | Out-Null
+            }
         }
     }
 
